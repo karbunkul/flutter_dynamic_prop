@@ -9,9 +9,10 @@ class DynamicProp<T> extends StatefulWidget {
   final PropDefinition<T> definition;
   final OnPropChange<T> onPropChange;
   final PropBuilder builder;
+  final T initialData;
 
   const DynamicProp(
-      {Key key, @required this.definition, this.onPropChange, this.builder})
+      {Key key, @required this.definition, this.onPropChange, this.builder, this.initialData,})
       : super(key: key);
 
   @override
@@ -28,7 +29,7 @@ class _DynamicPropState<T> extends State<DynamicProp<T>> {
   }
 
   initProp() {
-    _value = widget.definition.initialData;
+    _value = widget.initialData ?? widget.definition.initialData;
     widget.definition.widget.init(_value);
   }
 
@@ -61,7 +62,7 @@ class _DynamicPropState<T> extends State<DynamicProp<T>> {
 
   @override
   void dispose() {
-    widget.definition.widget.dispose();
     super.dispose();
+    widget?.definition?.widget?.dispose();
   }
 }
