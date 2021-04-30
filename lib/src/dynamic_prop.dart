@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+
 import 'prop_definition.dart';
 
 typedef OnPropChange<T>(String id, T value);
@@ -7,13 +8,13 @@ typedef Widget PropBuilder(BuildContext context, Widget child);
 
 class DynamicProp<T> extends StatefulWidget {
   final PropDefinition<T> definition;
-  final OnPropChange<T> onPropChange;
-  final PropBuilder builder;
-  final T initialData;
+  final OnPropChange<T>? onPropChange;
+  final PropBuilder? builder;
+  final T? initialData;
 
   const DynamicProp({
-    Key key,
-    @required this.definition,
+    Key? key,
+    required this.definition,
     this.onPropChange,
     this.builder,
     this.initialData,
@@ -23,8 +24,8 @@ class DynamicProp<T> extends StatefulWidget {
   _DynamicPropState<T> createState() => _DynamicPropState<T>();
 }
 
-class _DynamicPropState<T> extends State<DynamicProp<T>> {
-  T _value;
+class _DynamicPropState<T> extends State<DynamicProp<T?>> {
+  T? _value;
 
   @override
   void initState() {
@@ -43,23 +44,23 @@ class _DynamicPropState<T> extends State<DynamicProp<T>> {
         widget.definition.initialData != oldWidget.definition.initialData) {
       initProp();
     }
-    super.didUpdateWidget(oldWidget);
+    super.didUpdateWidget(oldWidget as DynamicProp<T>);
   }
 
   @override
   Widget build(BuildContext context) {
-    var onChanged = (T newValue) {
+    var onChanged = (T? newValue) {
       setState(() {
         if (identical(_value, newValue) == false) {
           _value = newValue;
-          widget.onPropChange(widget.definition.id, newValue);
+          widget.onPropChange!(widget.definition.id, newValue);
         }
       });
     };
 
     Widget child = widget.definition.widget.builder(context, _value, onChanged);
     if (widget.builder != null) {
-      return widget.builder(context, child);
+      return widget.builder!(context, child);
     }
     return child;
   }
@@ -67,6 +68,6 @@ class _DynamicPropState<T> extends State<DynamicProp<T>> {
   @override
   void dispose() {
     super.dispose();
-    widget?.definition?.widget?.dispose();
+    widget.definition.widget.dispose();
   }
 }
