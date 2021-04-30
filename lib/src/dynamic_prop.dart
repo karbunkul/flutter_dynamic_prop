@@ -11,9 +11,13 @@ class DynamicProp<T> extends StatefulWidget {
   final PropBuilder builder;
   final T initialData;
 
-  const DynamicProp(
-      {Key key, @required this.definition, this.onPropChange, this.builder, this.initialData,})
-      : super(key: key);
+  const DynamicProp({
+    Key key,
+    @required this.definition,
+    this.onPropChange,
+    this.builder,
+    this.initialData,
+  }) : super(key: key);
 
   @override
   _DynamicPropState<T> createState() => _DynamicPropState<T>();
